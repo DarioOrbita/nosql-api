@@ -28,11 +28,11 @@ const thoughtController = {
   },
   addThought({ params, body }, res) {
     Thought.create(body)
-      .then(({ _id }) => {
+      .then((dbThoughtData) => {
         return User.findOneAndUpdate(
-          { _id: params.thoughtId },
-          { $push: { thoughts: _id } },
-          { new: true }
+          { _id: body.userId },
+          { $push: { thoughts: dbThoughtData._id } },
+          { new: true, runValidators: true }
         );
       })
       .then((dbUserData) => {
